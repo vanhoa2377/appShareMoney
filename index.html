@@ -3,225 +3,248 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chia Tiền Chuyến Đi - Quỹ Chung & Chia Chọn Lọc</title>
+  <title>Chia Tiền Chuyến Đi - Quyết Toán Thông Minh</title>
   
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- html2canvas cho tính năng xuất ảnh -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     body { font-family: 'Be Vietnam Pro', sans-serif; }
+    /* Tùy chỉnh thanh cuộn cho đẹp */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4 sm:px-6">
+<body class="bg-slate-100 text-slate-800 min-h-screen py-8 px-4 sm:px-6">
 
   <div class="max-w-4xl mx-auto space-y-6">
     
-    <header class="text-center space-y-2">
-      <div class="inline-flex items-center justify-center p-3 bg-indigo-100 text-indigo-600 rounded-2xl mb-1">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
+    <!-- Header & Tên chuyến đi -->
+    <header class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-8 text-center relative overflow-hidden">
+        <div class="relative z-10 space-y-3">
+          <span class="inline-block py-1 px-3 rounded-full bg-white/20 text-white text-xs font-semibold backdrop-blur-sm tracking-wider uppercase">
+            Công cụ quyết toán
+          </span>
+          <input type="text" id="tripNameInput" value="🏕️ Cắm trại Suối Mỡ - Cuối tuần xả hơi" 
+            class="w-full text-center bg-transparent text-2xl sm:text-3xl font-bold text-white placeholder-white/70 focus:outline-none focus:border-b-2 focus:border-white/50 pb-1 transition-all"
+            placeholder="Nhập tên chuyến đi của bạn...">
+        </div>
+        <!-- Hình trang trí -->
+        <svg class="absolute -bottom-10 -left-10 w-40 h-40 text-white opacity-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2z"/></svg>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Quản Lý Chi Phí & Quyết Toán Chuyến Đi</h1>
-      <p class="text-sm text-slate-500 max-w-xl mx-auto">Hỗ trợ nộp quỹ ban đầu, ghi nhận chi từ quỹ hoặc tiền túi, chọn người cùng chia từng món và tạo mã VietQR chuyển khoản tức thì.</p>
+      <div class="p-4 text-center">
+        <p class="text-sm text-slate-500">Ghi nhận chi tiêu, tự động cấn trừ nợ và tạo mã QR thanh toán nhanh chóng.</p>
+      </div>
     </header>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
-      <div class="border-b border-slate-100 pb-3">
-        <h2 class="text-lg font-semibold text-slate-800 flex items-center gap-2">
-          <span>💰</span> 1. Thiết lập Quỹ chung (Kitty Pool)
-        </h2>
-        <p class="text-xs text-slate-400">Nếu chuyến đi không gom quỹ trước, bạn có thể để số tiền đóng quỹ là 0 đ</p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5">Mỗi người đóng trước vào quỹ:</label>
-          <div class="relative">
-            <input type="number" id="fundContribution" min="0" step="10000" value="500000" 
-              class="w-full text-sm font-semibold px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-8 text-right">
-            <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-bold">đ</span>
+    <!-- Card 1: Thành viên -->
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 space-y-5 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -z-0 opacity-50"></div>
+      
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4 relative z-10">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg">1</div>
+          <div>
+            <h2 class="text-lg font-bold text-slate-800">Danh sách thành viên</h2>
+            <p class="text-xs text-slate-500">Thêm STK/Ví để nhận tiền lúc tổng kết</p>
           </div>
         </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5">Người giữ quỹ (Thủ quỹ):</label>
-          <select id="fundKeeperSelect" 
-            class="w-full text-sm font-semibold px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div>
-          <h2 class="text-lg font-semibold text-slate-800">2. Danh sách thành viên</h2>
-          <p class="text-xs text-slate-400">Điền STK / SĐT Ví để tự tạo mã QR nhận tiền khi kết thúc chuyến</p>
-        </div>
-        <span id="memberCountBadge" class="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-full">4 người</span>
+        <span id="memberCountBadge" class="text-xs font-bold px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg">0 người</span>
       </div>
 
-      <div id="membersList" class="space-y-3">
+      <div id="membersList" class="space-y-3 relative z-10">
+        <!-- Render members here -->
       </div>
 
-      <button type="button" onclick="addMemberRow()" class="w-full inline-flex items-center justify-center px-4 py-2 border border-dashed border-indigo-300 rounded-xl text-sm font-medium text-indigo-600 bg-indigo-50/40 hover:bg-indigo-50 hover:border-indigo-400 transition-colors">
-        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+      <button type="button" onclick="addMemberRow()" class="w-full relative z-10 inline-flex items-center justify-center px-4 py-3 border-2 border-dashed border-blue-200 rounded-xl text-sm font-semibold text-blue-600 bg-blue-50/50 hover:bg-blue-50 transition-colors">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
         Thêm thành viên
       </button>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div>
-          <h2 class="text-lg font-semibold text-slate-800">3. Các khoản chi lẻ trong chuyến đi</h2>
-          <p class="text-xs text-slate-400">Chọn nguồn tiền (Quỹ chung hoặc tiền túi) và tích chọn ai cùng chia</p>
+    <!-- Card 2: Khoản chi -->
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 space-y-5 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-full -z-0 opacity-50"></div>
+
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4 relative z-10">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">2</div>
+          <div>
+            <h2 class="text-lg font-bold text-slate-800">Các khoản chi tiêu</h2>
+            <p class="text-xs text-slate-500">Ai đã bỏ tiền ra trả và khoản đó chia cho những ai?</p>
+          </div>
         </div>
-        <span id="expenseCountBadge" class="text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full">3 khoản chi</span>
+        <span id="expenseCountBadge" class="text-xs font-bold px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg">0 khoản chi</span>
       </div>
 
-      <div class="p-4 bg-indigo-50/40 border border-indigo-100 rounded-2xl space-y-3.5">
-        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+      <!-- Form nhập -->
+      <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-4 relative z-10">
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
           <div class="sm:col-span-5">
-            <label class="block text-xs font-medium text-slate-600 mb-1">Tên món đồ / Khoản chi</label>
-            <input type="text" id="newExpenseTitle" placeholder="Ví dụ: Tiền ăn BBQ, Vé tham quan, Tiền bia..." 
-              class="w-full text-sm font-medium px-3 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Nội dung chi</label>
+            <input type="text" id="newExpenseTitle" placeholder="VD: Mua vé, ăn trưa..." 
+              class="w-full text-sm font-medium px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
           </div>
 
           <div class="sm:col-span-4">
-            <label class="block text-xs font-medium text-slate-600 mb-1">Nguồn tiền thanh toán</label>
-            <select id="newExpensePayer" class="w-full text-sm font-medium px-2.5 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Người trả tiền</label>
+            <select id="newExpensePayer" class="w-full text-sm font-medium px-3 py-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
             </select>
           </div>
 
           <div class="sm:col-span-3">
-            <label class="block text-xs font-medium text-slate-600 mb-1">Số tiền</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Số tiền (VNĐ)</label>
             <div class="relative">
               <input type="number" id="newExpenseAmount" min="0" step="1000" placeholder="0" 
                 oninput="updateSplitPreview()"
-                class="w-full text-sm font-medium px-3 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-7 text-right">
-              <span class="absolute right-2.5 top-2 text-xs text-slate-400 font-bold">đ</span>
+                class="w-full text-sm font-bold text-emerald-700 px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 pr-8 text-right">
+              <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-bold">đ</span>
             </div>
           </div>
         </div>
 
-        <div class="space-y-1.5 pt-1">
+        <div class="space-y-2 pt-2 border-t border-slate-200/60">
           <div class="flex items-center justify-between">
-            <label class="text-xs font-semibold text-slate-700">Người cùng chia khoản này:</label>
-            <div class="space-x-2 text-xs">
-              <button type="button" onclick="selectAllParticipants(true)" class="text-indigo-600 hover:underline font-medium">Chọn tất cả</button>
+            <label class="text-xs font-bold text-slate-700">Người cùng chia khoản này:</label>
+            <div class="space-x-3 text-xs">
+              <button type="button" onclick="selectAllParticipants(true)" class="text-emerald-600 hover:text-emerald-700 font-semibold transition-colors">Tất cả</button>
               <span class="text-slate-300">|</span>
-              <button type="button" onclick="selectAllParticipants(false)" class="text-slate-500 hover:underline">Bỏ chọn hết</button>
+              <button type="button" onclick="selectAllParticipants(false)" class="text-slate-500 hover:text-slate-700 transition-colors">Bỏ chọn</button>
             </div>
           </div>
           
-          <div id="participantCheckboxes" class="flex flex-wrap gap-2 pt-1">
+          <div id="participantCheckboxes" class="flex flex-wrap gap-2">
+            <!-- Dynamic checkboxes -->
           </div>
-          <p id="splitPerPersonPreview" class="text-xs text-indigo-600 italic pt-1"></p>
+          <p id="splitPerPersonPreview" class="text-xs text-emerald-600 font-medium italic h-4"></p>
         </div>
 
-        <button type="button" onclick="addExpenseItem()" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-medium transition-colors">
-          <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-          Thêm khoản chi này
+        <button type="button" onclick="addExpenseItem()" class="w-full inline-flex items-center justify-center px-4 py-3 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-bold shadow-sm transition-all transform active:scale-[0.98]">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+          Ghi nhận khoản chi
         </button>
       </div>
 
-      <div class="space-y-2 pt-1" id="expensesContainer">
+      <!-- Danh sách đã chi -->
+      <div class="space-y-3 pt-2 relative z-10" id="expensesContainer">
       </div>
 
-      <div class="pt-4 border-t border-slate-100">
-        <button type="button" onclick="calculateSplit()" class="w-full inline-flex items-center justify-center px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-base font-semibold shadow-sm shadow-indigo-200 transition-colors">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-          Tổng kết & Quyết toán chi phí
+      <div class="pt-6 relative z-10">
+        <button type="button" onclick="calculateSplit()" class="w-full inline-flex items-center justify-center px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-2xl text-base font-bold shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-1">
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          XEM KẾT QUẢ QUYẾT TOÁN
         </button>
       </div>
     </div>
 
-    <div id="resultSection" class="space-y-6 hidden">
+    <!-- Kết quả & Hóa đơn (Phần này sẽ được chụp ảnh) -->
+    <div id="resultSection" class="hidden space-y-4">
       
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-medium text-slate-500">Tổng chi tiêu cả chuyến</p>
-          <p id="totalExpenseDisplay" class="text-xl font-bold text-slate-900 mt-1">0 đ</p>
-          <span class="text-xs text-slate-400 mt-0.5 block" id="totalSpentBreakdown"></span>
-        </div>
-
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-medium text-slate-500">Tình trạng Quỹ chung</p>
-          <p id="fundStatusDisplay" class="text-xl font-bold text-emerald-600 mt-1">0 đ</p>
-          <span class="text-xs text-slate-400 mt-0.5 block" id="fundStatusDetail"></span>
-        </div>
-
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-medium text-slate-500">Người giữ quỹ (Thủ quỹ)</p>
-          <p id="keeperNameDisplay" class="text-xl font-bold text-indigo-600 mt-1">---</p>
-          <span class="text-xs text-slate-400 mt-0.5 block">Chịu trách nhiệm hoàn/thu số dư quỹ</span>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
-        <h3 class="text-base font-semibold text-slate-800">Bảng đối soát chi tiêu từng cá nhân</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead>
-              <tr class="text-xs uppercase text-slate-400 border-b border-slate-100">
-                <th class="pb-3 font-medium">Thành viên</th>
-                <th class="pb-3 font-medium text-right">Đã nộp quỹ</th>
-                <th class="pb-3 font-medium text-right">Tự chi tiền túi</th>
-                <th class="pb-3 font-medium text-right">Chi phí bản thân</th>
-                <th class="pb-3 font-medium text-right">Quyết toán ròng</th>
-              </tr>
-            </thead>
-            <tbody id="balanceTableBody" class="divide-y divide-slate-100 font-medium">
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="text-base font-semibold text-slate-800">Phương án chuyển khoản (Tối ưu số lần)</h3>
-            <p class="text-xs text-slate-500">Bấm nút QR để người chuyển quét trực tiếp vào ngân hàng hoặc ví</p>
+      <!-- Container để chụp ảnh hóa đơn -->
+      <div id="billCaptureArea" class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden relative">
+        
+        <!-- Header hóa đơn -->
+        <div class="bg-slate-800 px-6 py-6 text-center">
+          <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-1">Hóa đơn quyết toán</p>
+          <h3 id="billTripNameDisplay" class="text-xl font-bold text-white mb-4">Tên chuyến đi</h3>
+          <div class="inline-block bg-slate-700/50 rounded-2xl px-6 py-3">
+            <p class="text-xs text-slate-300 font-medium mb-1">Tổng chi phí cả nhóm</p>
+            <p id="totalExpenseDisplay" class="text-3xl font-bold text-emerald-400">0 đ</p>
           </div>
-          <button onclick="copyToClipboard()" class="inline-flex items-center text-xs font-medium text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors">
-            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
-            Sao chép gửi Zalo
-          </button>
         </div>
 
-        <div id="transactionsList" class="space-y-3">
+        <div class="p-6 space-y-8 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+          
+          <!-- Bảng đối soát -->
+          <div>
+            <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              Tóm tắt cá nhân
+            </h4>
+            <div class="overflow-x-auto rounded-xl border border-slate-100">
+              <table class="w-full text-left text-sm bg-white">
+                <thead>
+                  <tr class="text-xs uppercase text-slate-500 bg-slate-50 border-b border-slate-100">
+                    <th class="py-3 px-4 font-bold">Thành viên</th>
+                    <th class="py-3 px-4 font-bold text-right">Đã chi trả</th>
+                    <th class="py-3 px-4 font-bold text-right">Thực dùng</th>
+                    <th class="py-3 px-4 font-bold text-right">Cần thu/chi</th>
+                  </tr>
+                </thead>
+                <tbody id="balanceTableBody" class="divide-y divide-slate-100 font-medium">
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Lệnh chuyển khoản -->
+          <div>
+            <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+              Luồng chuyển tiền tối ưu
+            </h4>
+            <div id="transactionsList" class="space-y-3">
+            </div>
+          </div>
+          
+          <div class="text-center pt-4 border-t border-slate-100">
+            <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Tạo bởi Công cụ Quyết Toán Thông Minh</p>
+          </div>
         </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row items-center gap-3 justify-end">
+        <button onclick="copyToClipboard()" class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-sm font-bold shadow-sm transition-colors">
+          <svg class="w-4 h-4 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+          Copy Text gửi Zalo
+        </button>
+        <button onclick="exportToImage()" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-sm shadow-emerald-200 transition-colors">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Lưu ảnh Hóa Đơn
+        </button>
       </div>
 
     </div>
   </div>
 
-  <div id="qrModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 text-center space-y-4 relative">
-      <button onclick="closeQRModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
+  <!-- Modal VietQR Popup -->
+  <div id="qrModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 text-center space-y-4 relative transform scale-100 transition-transform">
+      <button onclick="closeQRModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
 
       <div>
-        <h4 class="text-lg font-bold text-slate-900">Quét mã chuyển khoản</h4>
-        <p class="text-xs text-slate-500 mt-0.5">Dùng App Ngân hàng, MoMo hoặc ZaloPay để quét</p>
+        <h4 class="text-lg font-bold text-slate-900">Quét mã thanh toán</h4>
+        <p class="text-xs text-slate-500 mt-0.5">Sử dụng App Ngân hàng hoặc Ví điện tử</p>
       </div>
 
-      <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center justify-center min-h-[300px]">
-        <img id="qrImage" src="" alt="Mã VietQR" class="w-full h-auto rounded-xl object-contain shadow-sm">
+      <div class="bg-slate-50 p-2 rounded-2xl border border-slate-100 flex items-center justify-center min-h-[250px]">
+        <img id="qrImage" src="" alt="Mã VietQR" class="w-full h-auto rounded-xl object-contain mix-blend-multiply">
       </div>
 
-      <div class="text-xs space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-100 text-left">
-        <p><span class="text-slate-500">Người nhận:</span> <strong id="qrRecipientName" class="text-slate-800"></strong></p>
-        <p><span class="text-slate-500">Hình thức:</span> <strong id="qrBankName" class="text-slate-800"></strong> - <span id="qrAccountNum" class="font-mono font-semibold text-indigo-600"></span></p>
-        <p><span class="text-slate-500">Số tiền:</span> <strong id="qrAmount" class="text-emerald-600"></strong></p>
+      <div class="text-sm space-y-1.5 bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 text-left">
+        <p class="flex justify-between"><span class="text-slate-500 font-medium">Người nhận:</span> <strong id="qrRecipientName" class="text-slate-900 uppercase"></strong></p>
+        <p class="flex justify-between"><span class="text-slate-500 font-medium">Ngân hàng:</span> <strong id="qrBankName" class="text-slate-900"></strong></p>
+        <p class="flex justify-between"><span class="text-slate-500 font-medium">Số tài khoản:</span> <strong id="qrAccountNum" class="font-mono text-indigo-700"></strong></p>
+        <div class="pt-2 mt-2 border-t border-indigo-100/60 flex justify-between items-center">
+            <span class="text-slate-500 font-medium">Số tiền:</span> 
+            <strong id="qrAmount" class="text-lg text-emerald-600"></strong>
+        </div>
       </div>
 
-      <button onclick="closeQRModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-colors">
-        Đóng
+      <button onclick="closeQRModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-bold transition-colors">
+        Đóng cửa sổ
       </button>
     </div>
   </div>
@@ -231,21 +254,25 @@
       { code: "TCB", name: "Techcombank", placeholder: "Số tài khoản" },
       { code: "VPB", name: "VPBank", placeholder: "Số tài khoản" },
       { code: "MB", name: "MB Bank", placeholder: "Số tài khoản" },
+      { code: "VCB", name: "Vietcombank", placeholder: "Số tài khoản" },
       { code: "MOMO", name: "Ví MoMo", placeholder: "SĐT ví MoMo" },
       { code: "ZALOPAY", name: "Ví ZaloPay", placeholder: "SĐT ví ZaloPay" }
     ];
 
+    // Dữ liệu mẫu nhóm 5 người đi cắm trại
     let members = [
       { id: 1, name: "An", channel: "TCB", account: "1903654321001" },
       { id: 2, name: "Bình", channel: "MOMO", account: "0912345678" },
       { id: 3, name: "Cường", channel: "MB", account: "0987654321" },
-      { id: 4, name: "Dũng", channel: "ZALOPAY", account: "" }
+      { id: 4, name: "Dũng", channel: "ZALOPAY", account: "" },
+      { id: 5, name: "Tuấn", channel: "VCB", account: "1012345678" }
     ];
 
     let expenses = [
-      { id: 101, title: "Tiền ăn BBQ tối", payer: "fund", amount: 1200000, participants: [1, 2, 3, 4] },
-      { id: 102, title: "Tiền bia (Chỉ An & Bình)", payer: 1, amount: 300000, participants: [1, 2] },
-      { id: 103, title: "Vé cáp treo (Dũng không đi)", payer: "fund", amount: 450000, participants: [1, 2, 3] }
+      { id: 101, title: "Thuê lều trại & bếp", payer: 1, amount: 800000, participants: [1, 2, 3, 4, 5] },
+      { id: 102, title: "Tiền thịt nướng BBQ", payer: 2, amount: 650000, participants: [1, 2, 3, 4, 5] },
+      { id: 103, title: "Tiền bia (Dũng & Tuấn không uống)", payer: 3, amount: 300000, participants: [1, 2, 3] },
+      { id: 104, title: "Vé vào cửa Suối Mỡ", payer: 1, amount: 250000, participants: [1, 2, 3, 4, 5] }
     ];
 
     let currentSummaryText = "";
@@ -260,28 +287,29 @@
 
     function renderMembersInput() {
       const container = document.getElementById("membersList");
-      
       container.innerHTML = "";
 
-      members.forEach((m) => {
+      members.forEach((m, index) => {
         const channelInfo = getChannelInfo(m.channel);
         const row = document.createElement("div");
-        row.className = "grid grid-cols-1 sm:grid-cols-12 gap-2 p-3 bg-slate-50 border border-slate-100 rounded-xl items-center";
+        row.className = "grid grid-cols-1 sm:grid-cols-12 gap-3 p-3.5 bg-white border border-slate-200 shadow-sm rounded-2xl items-center transition-all hover:border-blue-300";
         
         row.innerHTML = `
-          <div class="sm:col-span-4">
-            <input type="text" value="${m.name}" placeholder="Tên" 
+          <div class="sm:col-span-4 flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-300 w-5 text-center">${index + 1}</span>
+            <input type="text" value="${m.name}" placeholder="Tên thành viên" 
               oninput="updateMemberName(${m.id}, this.value)"
-              class="w-full text-sm font-medium px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              class="w-full text-sm font-bold text-slate-800 px-3 py-2 bg-slate-50 border border-transparent focus:bg-white focus:border-blue-300 rounded-xl focus:outline-none transition-colors">
           </div>
 
           <div class="sm:col-span-4">
             <select onchange="changeChannel(${m.id}, this.value)" 
-              class="w-full text-sm font-medium px-2.5 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              class="w-full text-sm font-medium px-2.5 py-2 bg-slate-50 border border-transparent focus:bg-white focus:border-blue-300 rounded-xl focus:outline-none cursor-pointer transition-colors">
               <optgroup label="Ngân hàng">
                 <option value="TCB" ${m.channel === 'TCB' ? 'selected' : ''}>Techcombank</option>
                 <option value="VPB" ${m.channel === 'VPB' ? 'selected' : ''}>VPBank</option>
                 <option value="MB" ${m.channel === 'MB' ? 'selected' : ''}>MB Bank</option>
+                <option value="VCB" ${m.channel === 'VCB' ? 'selected' : ''}>Vietcombank</option>
               </optgroup>
               <optgroup label="Ví điện tử">
                 <option value="MOMO" ${m.channel === 'MOMO' ? 'selected' : ''}>Ví MoMo</option>
@@ -294,33 +322,28 @@
             <input type="text" id="account-input-${m.id}" value="${m.account || ''}" 
               placeholder="${channelInfo.placeholder}" 
               oninput="updateMemberField(${m.id}, 'account', this.value.trim())"
-              class="w-full text-sm font-mono px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              class="w-full text-sm font-mono text-indigo-700 px-3 py-2 bg-slate-50 border border-transparent focus:bg-white focus:border-blue-300 rounded-xl focus:outline-none transition-colors">
           </div>
 
           <div class="sm:col-span-1 text-right">
-            <button type="button" onclick="removeMemberRow(${m.id})" 
-              class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors ${members.length <= 2 ? 'opacity-30 pointer-events-none' : ''}">
+            <button type="button" onclick="removeMemberRow(${m.id})" title="Xóa người này"
+              class="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors ${members.length <= 2 ? 'opacity-30 pointer-events-none' : ''}">
               <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
             </button>
           </div>
         `;
-        
         container.appendChild(row);
       });
 
       document.getElementById("memberCountBadge").textContent = `${members.length} người`;
-      
-      updateKeeperDropdown();
       updatePayerDropdown();
       renderParticipantCheckboxes();
     }
 
     function updateMemberName(id, val) {
       const target = members.find(m => m.id === id);
-      
       if (target) {
         target.name = val;
-        updateKeeperDropdown();
         updatePayerDropdown();
         renderParticipantCheckboxes();
         renderExpenses();
@@ -329,39 +352,29 @@
 
     function updateMemberField(id, field, val) {
       const target = members.find(m => m.id === id);
-      if (target) {
-          target[field] = val;
-      }
+      if (target) target[field] = val;
     }
 
     function changeChannel(id, newChannel) {
       updateMemberField(id, 'channel', newChannel);
-      
       const channelInfo = getChannelInfo(newChannel);
       const inputEl = document.getElementById(`account-input-${id}`);
-      
-      if (inputEl) {
-          inputEl.placeholder = channelInfo.placeholder;
-      }
+      if (inputEl) inputEl.placeholder = channelInfo.placeholder;
     }
 
     function addMemberRow() {
       const newId = Date.now();
       members.push({ id: newId, name: `Người ${members.length + 1}`, channel: "TCB", account: "" });
-      
       renderMembersInput();
       renderExpenses();
     }
 
     function removeMemberRow(id) {
       if (members.length <= 2) return;
-      
       members = members.filter(m => m.id !== id);
       
       expenses.forEach(e => {
-        if (e.payer == id) {
-            e.payer = "fund";
-        }
+        if (e.payer == id) e.payer = members[0].id;
         e.participants = e.participants.filter(pId => pId !== id);
       });
       
@@ -369,47 +382,26 @@
       renderExpenses();
     }
 
-    function updateKeeperDropdown() {
-      const select = document.getElementById("fundKeeperSelect");
-      const currentVal = select.value || (members[0] ? members[0].id : "");
-      
-      select.innerHTML = members.map(m => 
-          `<option value="${m.id}" ${currentVal == m.id ? 'selected' : ''}>${m.name}</option>`
-      ).join('');
-    }
-
     function updatePayerDropdown() {
       const select = document.getElementById("newExpensePayer");
-      const currentVal = select.value || "fund";
-      
-      let html = `<option value="fund" ${currentVal === 'fund' ? 'selected' : ''}>💰 Quỹ chung</option>`;
-      html += `<optgroup label="Cá nhân tự chi tiền túi:">`;
-      html += members.map(m => `<option value="${m.id}" ${currentVal == m.id ? 'selected' : ''}>${m.name}</option>`).join('');
-      html += `</optgroup>`;
-      
-      select.innerHTML = html;
+      const currentVal = select.value || (members[0] ? members[0].id : "");
+      select.innerHTML = members.map(m => `<option value="${m.id}" ${currentVal == m.id ? 'selected' : ''}>${m.name}</option>`).join('');
     }
 
     function renderParticipantCheckboxes() {
       const container = document.getElementById("participantCheckboxes");
-      
       container.innerHTML = members.map(m => `
-        <label class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors text-xs font-medium text-slate-700">
-          <input type="checkbox" value="${m.id}" checked onchange="updateSplitPreview()" class="participant-cb rounded text-indigo-600 focus:ring-indigo-500">
+        <label class="inline-flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-emerald-300 transition-colors text-xs font-bold text-slate-700 shadow-sm">
+          <input type="checkbox" value="${m.id}" checked onchange="updateSplitPreview()" class="participant-cb w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
           <span>${m.name}</span>
         </label>
       `).join('');
-      
       updateSplitPreview();
     }
 
     function selectAllParticipants(check) {
       const checkboxes = document.querySelectorAll(".participant-cb");
-      
-      checkboxes.forEach(cb => { 
-          cb.checked = check; 
-      });
-      
+      checkboxes.forEach(cb => { cb.checked = check; });
       updateSplitPreview();
     }
 
@@ -420,9 +412,11 @@
 
       if (checkedCount === 0) {
         previewEl.textContent = "⚠️ Vui lòng chọn ít nhất 1 người chịu khoản này.";
+        previewEl.className = "text-xs text-red-500 font-medium h-4";
       } else if (amount > 0) {
         const perPerson = Math.round(amount / checkedCount);
-        previewEl.textContent = `💡 Chia cho ${checkedCount} người: ~${formatVND(perPerson)} / người`;
+        previewEl.textContent = `Mỗi người chịu khoảng ~${formatVND(perPerson)}`;
+        previewEl.className = "text-xs text-emerald-600 font-medium italic h-4";
       } else {
         previewEl.textContent = "";
       }
@@ -430,56 +424,41 @@
 
     function renderExpenses() {
       const container = document.getElementById("expensesContainer");
-      
       container.innerHTML = "";
 
       if (expenses.length === 0) {
-        container.innerHTML = `<p class="text-sm text-slate-400 italic py-2">Chưa có khoản chi nào.</p>`;
+        container.innerHTML = `<div class="text-center p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-200"><p class="text-sm text-slate-400 font-medium">Chưa có khoản chi nào được ghi nhận.</p></div>`;
       } else {
-        expenses.forEach(e => {
-          let payerLabel = "";
-          
-          if (e.payer === "fund") {
-            payerLabel = `<span class="inline-flex items-center font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded text-xs">💰 Quỹ chung</span>`;
-          } else {
-            const payer = members.find(m => m.id == e.payer) || { name: "Ẩn danh" };
-            payerLabel = `<span class="text-xs text-slate-500">Tiền túi: <strong class="text-indigo-600">${payer.name}</strong></span>`;
-          }
-
-          const participantNames = e.participants
-            .map(pId => {
-              const m = members.find(x => x.id === pId);
-              return m ? m.name : null;
-            })
-            .filter(Boolean)
-            .join(", ");
-
+        expenses.forEach((e, index) => {
+          const payer = members.find(m => m.id == e.payer) || { name: "Ẩn danh" };
+          const participantNames = e.participants.map(pId => members.find(x => x.id === pId)?.name).filter(Boolean).join(", ");
           const isAll = e.participants.length === members.length;
           const shareText = isAll ? "Tất cả mọi người" : participantNames;
 
           const row = document.createElement("div");
-          row.className = "flex items-center justify-between p-3.5 bg-slate-50 border border-slate-100 rounded-xl text-sm gap-3";
+          row.className = "flex items-center justify-between p-4 bg-white border border-slate-100 shadow-sm rounded-2xl text-sm gap-3 transition-transform hover:-translate-y-0.5";
           
           row.innerHTML = `
-            <div class="space-y-1">
-              <div class="flex items-center gap-2">
-                <span class="font-semibold text-slate-800">${e.title}</span>
-                ${payerLabel}
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-400 mt-0.5">${index + 1}</div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-bold text-slate-800 text-base">${e.title}</span>
+                  <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-600">${payer.name} trả</span>
+                </div>
+                <p class="text-xs text-slate-500">Người chia: <span class="text-slate-700 font-medium">${shareText}</span></p>
               </div>
-              <p class="text-xs text-slate-500">Chia cho: <span class="text-slate-700 font-medium">${shareText}</span> (${e.participants.length} người)</p>
             </div>
-            <div class="flex items-center gap-3">
-              <span class="font-bold text-slate-900">${formatVND(e.amount)}</span>
-              <button onclick="removeExpense(${e.id})" class="text-slate-400 hover:text-rose-600 p-1">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            <div class="flex items-center gap-4">
+              <span class="font-black text-slate-900 text-base">${formatVND(e.amount)}</span>
+              <button onclick="removeExpense(${e.id})" class="text-slate-300 hover:text-red-500 p-1 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
               </button>
             </div>
           `;
-          
           container.appendChild(row);
         });
       }
-
       document.getElementById("expenseCountBadge").textContent = `${expenses.length} khoản chi`;
     }
 
@@ -490,36 +469,18 @@
       const checkedBoxes = document.querySelectorAll(".participant-cb:checked");
 
       const title = titleInput.value.trim();
-      const payer = payerSelect.value === "fund" ? "fund" : Number(payerSelect.value);
+      const payer = Number(payerSelect.value);
       const amount = Number(amountInput.value);
       const participants = Array.from(checkedBoxes).map(cb => Number(cb.value));
 
-      if (!title) {
-        alert("Vui lòng nhập tên món đồ hoặc khoản chi.");
-        return;
-      }
-      
-      if (!amount || amount <= 0) {
-        alert("Vui lòng nhập số tiền hợp lệ lớn hơn 0.");
-        return;
-      }
-      
-      if (participants.length === 0) {
-        alert("Vui lòng tích chọn ít nhất một người cùng chia khoản này.");
-        return;
-      }
+      if (!title) return alert("Vui lòng nhập tên khoản chi.");
+      if (!amount || amount <= 0) return alert("Vui lòng nhập số tiền hợp lệ.");
+      if (participants.length === 0) return alert("Vui lòng chọn ít nhất một người chia khoản này.");
 
-      expenses.push({
-        id: Date.now(),
-        title,
-        payer,
-        amount,
-        participants
-      });
+      expenses.push({ id: Date.now(), title, payer, amount, participants });
 
       titleInput.value = "";
       amountInput.value = "";
-      
       selectAllParticipants(true);
       renderExpenses();
     }
@@ -533,107 +494,40 @@
       const n = members.length;
       if (n === 0) return;
 
-      const initialPerPerson = Number(document.getElementById("fundContribution").value) || 0;
-      const keeperId = Number(document.getElementById("fundKeeperSelect").value) || members[0].id;
-      const keeper = members.find(m => m.id === keeperId) || members[0];
-
-      let totalFundSpent = 0;
-      let totalOutOfPocketSpent = 0;
-
+      let totalTripExpense = 0;
       const costMap = {};
-      const outOfPocketMap = {};
+      const paidMap = {};
       
-      members.forEach(m => {
-        costMap[m.id] = 0;
-        outOfPocketMap[m.id] = 0;
-      });
+      members.forEach(m => { costMap[m.id] = 0; paidMap[m.id] = 0; });
 
       expenses.forEach(e => {
+        totalTripExpense += e.amount;
+        if (paidMap[e.payer] !== undefined) paidMap[e.payer] += e.amount;
+
         const shareCount = e.participants.length;
-        
         if (shareCount > 0) {
           const perPerson = e.amount / shareCount;
-          
-          e.participants.forEach(pId => {
-            if (costMap[pId] !== undefined) {
-              costMap[pId] += perPerson;
-            }
-          });
-        }
-
-        if (e.payer === "fund") {
-          totalFundSpent += e.amount;
-        } else {
-          totalOutOfPocketSpent += e.amount;
-          
-          if (outOfPocketMap[e.payer] !== undefined) {
-            outOfPocketMap[e.payer] += e.amount;
-          }
+          e.participants.forEach(pId => { if (costMap[pId] !== undefined) costMap[pId] += perPerson; });
         }
       });
 
-      const totalTripExpense = totalFundSpent + totalOutOfPocketSpent;
-      const totalFundCollected = n * initialPerPerson;
-      const fundRemaining = totalFundCollected - totalFundSpent;
-
+      // Cập nhật giao diện Hóa đơn
+      const tripName = document.getElementById("tripNameInput").value || "Chuyến đi không tên";
+      document.getElementById("billTripNameDisplay").textContent = tripName;
       document.getElementById("totalExpenseDisplay").textContent = formatVND(totalTripExpense);
-      document.getElementById("totalSpentBreakdown").textContent = `(Quỹ chi: ${formatVND(totalFundSpent)} + Tiền túi: ${formatVND(totalOutOfPocketSpent)})`;
 
-      const fundStatusEl = document.getElementById("fundStatusDisplay");
-      const fundDetailEl = document.getElementById("fundStatusDetail");
-      
-      document.getElementById("keeperNameDisplay").textContent = keeper.name;
-
-      if (fundRemaining >= 0) {
-        fundStatusEl.className = "text-xl font-bold text-emerald-600 mt-1";
-        fundStatusEl.textContent = `Dư +${formatVND(fundRemaining)}`;
-        fundDetailEl.textContent = `Đã thu ${formatVND(totalFundCollected)}, đã chi ${formatVND(totalFundSpent)}`;
-      } else {
-        fundStatusEl.className = "text-xl font-bold text-rose-600 mt-1";
-        fundStatusEl.textContent = `Âm ${formatVND(Math.abs(fundRemaining))}`;
-        fundDetailEl.textContent = `Thủ quỹ cần thu thêm bù quỹ thâm hụt`;
-      }
-
-      // Xử lý tính toán độ chính xác và bù trừ quỹ
+      // Xử lý làm tròn và fix sai số
       let unroundedBalances = members.map(m => {
-        const myPaidFund = initialPerPerson;
-        const myPaidPocket = outOfPocketMap[m.id] || 0;
-        const myTotalPaid = myPaidFund + myPaidPocket;
+        const myPaid = paidMap[m.id] || 0;
         const myCost = costMap[m.id] || 0;
-        
-        // Net gốc (Chưa làm tròn)
-        let net = myTotalPaid - myCost;
-        
-        // Thủ quỹ là người chịu trách nhiệm giữ khoản tiền quỹ dư (hoặc tự bù tiền túi nếu quỹ thâm hụt)
-        if (m.id === keeperId) {
-          net = net - fundRemaining;
-        }
-
-        return {
-          ...m,
-          name: m.name.trim() || "Ẩn danh",
-          paidFund: myPaidFund,
-          paidPocket: myPaidPocket,
-          cost: myCost,
-          net: net
-        };
+        return { ...m, name: m.name.trim() || "Ẩn danh", paid: myPaid, cost: myCost, net: myPaid - myCost };
       });
 
-      // Làm tròn an toàn
-      let balances = unroundedBalances.map(b => ({
-          ...b,
-          cost: Math.round(b.cost),
-          net: Math.round(b.net)
-      }));
+      let balances = unroundedBalances.map(b => ({ ...b, cost: Math.round(b.cost), net: Math.round(b.net) }));
 
-      // Bù trừ sai số làm tròn (Rounding Error Fix) đảm bảo tổng Net = 0
       let totalRoundingDiff = balances.reduce((sum, b) => sum + b.net, 0);
-      
-      if (totalRoundingDiff !== 0) {
-          const keeperIndex = balances.findIndex(b => b.id === keeperId);
-          if (keeperIndex !== -1) {
-              balances[keeperIndex].net -= totalRoundingDiff;
-          }
+      if (totalRoundingDiff !== 0 && balances.length > 0) {
+          balances[0].net -= totalRoundingDiff; 
       }
 
       const tbody = document.getElementById("balanceTableBody");
@@ -643,64 +537,47 @@
       let debtors = [];
 
       balances.forEach(b => {
-        if (b.net > 0) {
-            creditors.push({ ...b });
-        } else if (b.net < 0) {
-            debtors.push({ ...b, net: Math.abs(b.net) });
-        }
+        if (b.net > 0) creditors.push({ ...b });
+        else if (b.net < 0) debtors.push({ ...b, net: Math.abs(b.net) });
 
         const tr = document.createElement("tr");
         let statusBadge = "";
         
         if (b.net > 0) {
-          statusBadge = `<span class="inline-flex items-center text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-lg">Nhận lại +${formatVND(b.net)}</span>`;
+          statusBadge = `<span class="inline-flex items-center text-xs font-bold px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-lg whitespace-nowrap">Nhận +${formatVND(b.net)}</span>`;
         } else if (b.net < 0) {
-          statusBadge = `<span class="inline-flex items-center text-xs font-semibold px-2.5 py-1 bg-rose-50 text-rose-600 rounded-lg">Đóng thêm ${formatVND(Math.abs(b.net))}</span>`;
+          statusBadge = `<span class="inline-flex items-center text-xs font-bold px-2.5 py-1 bg-rose-100 text-rose-700 rounded-lg whitespace-nowrap">Trả ${formatVND(Math.abs(b.net))}</span>`;
         } else {
-          statusBadge = `<span class="inline-flex items-center text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-500 rounded-lg">Đã khớp (0 đ)</span>`;
+          statusBadge = `<span class="inline-flex items-center text-xs font-bold px-2.5 py-1 bg-slate-100 text-slate-500 rounded-lg whitespace-nowrap">Đã khớp</span>`;
         }
 
-        const channel = getChannelInfo(b.channel);
-        
         tr.innerHTML = `
-          <td class="py-3 text-slate-800">
-            <span class="font-semibold">${b.name}</span>
-            ${b.id === keeperId ? `<span class="text-xs bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded ml-1 font-semibold">Thủ quỹ</span>` : ''}
-            ${b.account ? `<span class="text-xs text-slate-400 block font-mono">(${channel.name}: ${b.account})</span>` : ''}
-          </td>
-          <td class="py-3 text-right text-slate-500">${formatVND(b.paidFund)}</td>
-          <td class="py-3 text-right text-slate-500">${formatVND(b.paidPocket)}</td>
-          <td class="py-3 text-right text-slate-700 font-semibold">${formatVND(b.cost)}</td>
-          <td class="py-3 text-right">${statusBadge}</td>
+          <td class="py-4 px-4 text-slate-800 font-bold">${b.name}</td>
+          <td class="py-4 px-4 text-right text-slate-500">${formatVND(b.paid)}</td>
+          <td class="py-4 px-4 text-right text-slate-700">${formatVND(b.cost)}</td>
+          <td class="py-4 px-4 text-right">${statusBadge}</td>
         `;
-        
         tbody.appendChild(tr);
       });
 
-      // Tối ưu thuật toán cấn trừ nợ (Tham lam - Greedy Sorting)
+      // Tối ưu thuật toán cấn trừ nợ (Tham lam - Greedy)
       creditors.sort((a, b) => b.net - a.net);
       debtors.sort((a, b) => b.net - a.net);
 
       const transactions = [];
-      let i = 0;
-      let j = 0;
+      let i = 0, j = 0;
 
       while (i < debtors.length && j < creditors.length) {
         const settleAmount = Math.min(debtors[i].net, creditors[j].net);
-
         if (settleAmount > 0) {
           transactions.push({
-            from: debtors[i].name,
-            to: creditors[j].name,
-            toChannel: creditors[j].channel,
-            toAccount: creditors[j].account,
+            from: debtors[i].name, to: creditors[j].name,
+            toChannel: creditors[j].channel, toAccount: creditors[j].account,
             amount: settleAmount
           });
         }
-
         debtors[i].net -= settleAmount;
         creditors[j].net -= settleAmount;
-
         if (debtors[i].net === 0) i++;
         if (creditors[j].net === 0) j++;
       }
@@ -708,67 +585,66 @@
       const transContainer = document.getElementById("transactionsList");
       transContainer.innerHTML = "";
 
-      let textSummary = `📋 TỔNG KẾT CHI PHÍ CHUYẾN ĐI\n`;
-      textSummary += `• Tổng chi: ${formatVND(totalTripExpense)}\n`;
-      textSummary += `• Quỹ chung (${keeper.name} giữ): ${fundRemaining >= 0 ? 'Còn dư +' : 'Thâm hụt '}${formatVND(Math.abs(fundRemaining))}\n\n`;
+      let textSummary = `📋 TỔNG KẾT: ${tripName.toUpperCase()}\n`;
+      textSummary += `• Tổng chi phí: ${formatVND(totalTripExpense)}\n\n`;
       textSummary += `👉 HƯỚNG DẪN CHUYỂN KHOẢN:\n`;
 
       if (transactions.length === 0) {
-        transContainer.innerHTML = `<p class="text-sm text-slate-400 italic py-2">Tất cả số dư đã khớp, không phát sinh chuyển khoản!</p>`;
+        transContainer.innerHTML = `<div class="text-center p-4 bg-emerald-50 rounded-xl"><p class="text-sm text-emerald-600 font-bold">🎉 Tuyệt vời! Tất cả số dư đã khớp, không ai nợ ai.</p></div>`;
         textSummary += `Tất cả mọi người đã khớp số dư!`;
       } else {
         transactions.forEach((t, idx) => {
           const channel = getChannelInfo(t.toChannel);
-          textSummary += `${idx + 1}. ${t.from} ➡️ chuyển ${formatVND(t.amount)} cho ${t.to}`;
-          
-          if (t.toAccount) {
-            textSummary += ` (${channel.name} - ${t.toAccount})\n`;
-          } else {
-            textSummary += `\n`;
-          }
-
           const hasAccount = t.toAccount && t.toAccount.length >= 4;
-          const item = document.createElement("div");
           
-          item.className = "flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl gap-3";
+          textSummary += `${idx + 1}. ${t.from} ➡️ chuyển ${formatVND(t.amount)} cho ${t.to}`;
+          if (hasAccount) textSummary += ` (${channel.name} - ${t.toAccount})\n`;
+          else textSummary += `\n`;
+
+          const item = document.createElement("div");
+          item.className = "flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl shadow-sm gap-3";
           
           item.innerHTML = `
-            <div class="flex items-center gap-2 text-sm">
-              <span class="font-bold text-rose-600">${t.from}</span>
-              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-              <span class="font-bold text-emerald-600">${t.to}</span>
-              ${hasAccount ? `<span class="text-xs bg-indigo-50 text-indigo-700 font-medium px-2 py-0.5 rounded-md">${channel.name}</span>` : ''}
+            <div class="flex items-center gap-3 text-sm">
+              <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">${idx + 1}</span>
+              <span class="font-bold text-rose-600 text-base">${t.from}</span>
+              <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              <span class="font-bold text-emerald-600 text-base">${t.to}</span>
             </div>
 
-            <div class="flex items-center justify-between sm:justify-end gap-3">
-              <span class="font-bold text-slate-900 text-base">${formatVND(t.amount)}</span>
+            <div class="flex items-center justify-between sm:justify-end gap-4">
+              <span class="font-black text-slate-900 text-lg">${formatVND(t.amount)}</span>
               
               ${hasAccount ? `
                 <button onclick="openQRModal('${t.from}', '${t.to}', '${t.toChannel}', '${t.toAccount}', ${t.amount})" 
-                  class="inline-flex items-center text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl shadow-sm transition-colors">
+                  class="inline-flex items-center text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-3 py-2 rounded-xl transition-colors">
                   <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-                  Quét QR
+                  Mã QR
                 </button>
               ` : `
-                <span class="text-xs text-amber-600 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-lg">Chưa có STK/Ví</span>
+                <span class="text-[10px] uppercase font-bold text-amber-600 bg-amber-50 px-2.5 py-1.5 rounded-lg border border-amber-100">Chưa có STK</span>
               `}
             </div>
           `;
-          
           transContainer.appendChild(item);
         });
       }
 
       currentSummaryText = textSummary;
-
-      document.getElementById("resultSection").classList.remove("hidden");
-      document.getElementById("resultSection").scrollIntoView({ behavior: 'smooth' });
+      const resSection = document.getElementById("resultSection");
+      resSection.classList.remove("hidden");
+      
+      // Cuộn mượt mà xuống kết quả
+      setTimeout(() => resSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
     }
 
     function openQRModal(from, to, channelCode, account, amount) {
       const channel = getChannelInfo(channelCode);
-      const memo = `${from} tra tien di choi`.substring(0, 50);
-      const qrUrl = `https://img.vietqr.io/image/${channelCode}-${account}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(memo)}&accountName=${encodeURIComponent(to)}`;
+      const tripName = document.getElementById("tripNameInput").value || "Quyet toan";
+      // Xóa dấu tiếng Việt và giới hạn độ dài memo
+      const memoStr = (from + " tra tien " + tripName).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9 ]/g, "").substring(0, 40);
+      
+      const qrUrl = `https://img.vietqr.io/image/${channelCode}-${account}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(memoStr)}&accountName=${encodeURIComponent(to)}`;
 
       document.getElementById("qrImage").src = qrUrl;
       document.getElementById("qrRecipientName").textContent = to;
@@ -786,18 +662,39 @@
 
     function copyToClipboard() {
       if (!currentSummaryText) return;
-      
       navigator.clipboard.writeText(currentSummaryText).then(() => {
-        alert("Đã sao chép tổng kết và hướng dẫn chuyển khoản vào bộ nhớ tạm! Có thể dán ngay vào Zalo.");
+        alert("✅ Đã sao chép nội dung quyết toán! Bạn có thể dán ngay vào Zalo/Messenger.");
+      });
+    }
+
+    // Tính năng xuất ảnh dùng html2canvas
+    function exportToImage() {
+      const captureArea = document.getElementById('billCaptureArea');
+      
+      // Thêm hiệu ứng loading cho nút bấm (tùy chọn)
+      
+      html2canvas(captureArea, {
+        scale: 2, // Tăng độ nét cho ảnh xuất ra
+        backgroundColor: '#ffffff',
+        useCORS: true
+      }).then(canvas => {
+        const link = document.createElement('a');
+        const tripName = document.getElementById("tripNameInput").value || "Chuyen-Di";
+        const safeName = tripName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, "");
+        
+        link.download = `Quyet-Toan-${safeName}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }).catch(err => {
+        alert("Có lỗi xảy ra khi tạo ảnh: " + err);
       });
     }
 
     document.getElementById("qrModal").addEventListener("click", function(e) {
-      if (e.target === this) {
-          closeQRModal();
-      }
+      if (e.target === this) closeQRModal();
     });
 
+    // Khởi tạo ban đầu
     renderMembersInput();
     renderExpenses();
   </script>
