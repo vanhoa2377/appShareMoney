@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chia Tiền Chuyến Đi - Quỹ Chung & Chia Chọn Lọc</title>
-  <!-- Tailwind CSS CDN -->
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
     body { font-family: 'Be Vietnam Pro', sans-serif; }
   </style>
@@ -17,7 +18,6 @@
 
   <div class="max-w-4xl mx-auto space-y-6">
     
-    <!-- Header -->
     <header class="text-center space-y-2">
       <div class="inline-flex items-center justify-center p-3 bg-indigo-100 text-indigo-600 rounded-2xl mb-1">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -28,7 +28,6 @@
       <p class="text-sm text-slate-500 max-w-xl mx-auto">Hỗ trợ nộp quỹ ban đầu, ghi nhận chi từ quỹ hoặc tiền túi, chọn người cùng chia từng món và tạo mã VietQR chuyển khoản tức thì.</p>
     </header>
 
-    <!-- Card 1: Cài đặt Quỹ chung (Kitty Pool) -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
       <div class="border-b border-slate-100 pb-3">
         <h2 class="text-lg font-semibold text-slate-800 flex items-center gap-2">
@@ -51,13 +50,11 @@
           <label class="block text-xs font-semibold text-slate-600 mb-1.5">Người giữ quỹ (Thủ quỹ):</label>
           <select id="fundKeeperSelect" 
             class="w-full text-sm font-semibold px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <!-- Render options dynamically -->
           </select>
         </div>
       </div>
     </div>
 
-    <!-- Card 2: Thành viên & Kênh thanh toán -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div>
@@ -68,7 +65,6 @@
       </div>
 
       <div id="membersList" class="space-y-3">
-        <!-- Render rows -->
       </div>
 
       <button type="button" onclick="addMemberRow()" class="w-full inline-flex items-center justify-center px-4 py-2 border border-dashed border-indigo-300 rounded-xl text-sm font-medium text-indigo-600 bg-indigo-50/40 hover:bg-indigo-50 hover:border-indigo-400 transition-colors">
@@ -77,7 +73,6 @@
       </button>
     </div>
 
-    <!-- Card 3: Thêm & Ghi nhận khoản chi lẻ (Multi-expenses & Custom Split) -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div>
@@ -87,7 +82,6 @@
         <span id="expenseCountBadge" class="text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full">3 khoản chi</span>
       </div>
 
-      <!-- Form nhập khoản chi mới -->
       <div class="p-4 bg-indigo-50/40 border border-indigo-100 rounded-2xl space-y-3.5">
         <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
           <div class="sm:col-span-5">
@@ -99,7 +93,6 @@
           <div class="sm:col-span-4">
             <label class="block text-xs font-medium text-slate-600 mb-1">Nguồn tiền thanh toán</label>
             <select id="newExpensePayer" class="w-full text-sm font-medium px-2.5 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              <!-- Render Quỹ chung + Tên từng người -->
             </select>
           </div>
 
@@ -114,7 +107,6 @@
           </div>
         </div>
 
-        <!-- Tích chọn người chia tiền -->
         <div class="space-y-1.5 pt-1">
           <div class="flex items-center justify-between">
             <label class="text-xs font-semibold text-slate-700">Người cùng chia khoản này:</label>
@@ -126,7 +118,6 @@
           </div>
           
           <div id="participantCheckboxes" class="flex flex-wrap gap-2 pt-1">
-            <!-- Dynamic checkboxes -->
           </div>
           <p id="splitPerPersonPreview" class="text-xs text-indigo-600 italic pt-1"></p>
         </div>
@@ -137,12 +128,9 @@
         </button>
       </div>
 
-      <!-- Danh sách khoản chi -->
       <div class="space-y-2 pt-1" id="expensesContainer">
-        <!-- Render expense list -->
       </div>
 
-      <!-- Nút Quyết Toán -->
       <div class="pt-4 border-t border-slate-100">
         <button type="button" onclick="calculateSplit()" class="w-full inline-flex items-center justify-center px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-base font-semibold shadow-sm shadow-indigo-200 transition-colors">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
@@ -151,10 +139,8 @@
       </div>
     </div>
 
-    <!-- Results Section -->
     <div id="resultSection" class="space-y-6 hidden">
       
-      <!-- Summary stats cards -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <p class="text-xs font-medium text-slate-500">Tổng chi tiêu cả chuyến</p>
@@ -175,7 +161,6 @@
         </div>
       </div>
 
-      <!-- Detail net balance -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
         <h3 class="text-base font-semibold text-slate-800">Bảng đối soát chi tiêu từng cá nhân</h3>
         <div class="overflow-x-auto">
@@ -190,13 +175,11 @@
               </tr>
             </thead>
             <tbody id="balanceTableBody" class="divide-y divide-slate-100 font-medium">
-              <!-- Render rows -->
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Transactions & QR triggers -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
         <div class="flex items-center justify-between">
           <div>
@@ -210,14 +193,12 @@
         </div>
 
         <div id="transactionsList" class="space-y-3">
-          <!-- Render transactions with QR buttons -->
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- Modal VietQR Popup -->
   <div id="qrModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 text-center space-y-4 relative">
       <button onclick="closeQRModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
@@ -229,7 +210,6 @@
         <p class="text-xs text-slate-500 mt-0.5">Dùng App Ngân hàng, MoMo hoặc ZaloPay để quét</p>
       </div>
 
-      <!-- QR Image Display -->
       <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center justify-center min-h-[300px]">
         <img id="qrImage" src="" alt="Mã VietQR" class="w-full h-auto rounded-xl object-contain shadow-sm">
       </div>
@@ -280,6 +260,7 @@
 
     function renderMembersInput() {
       const container = document.getElementById("membersList");
+      
       container.innerHTML = "";
 
       members.forEach((m) => {
@@ -323,10 +304,12 @@
             </button>
           </div>
         `;
+        
         container.appendChild(row);
       });
 
       document.getElementById("memberCountBadge").textContent = `${members.length} người`;
+      
       updateKeeperDropdown();
       updatePayerDropdown();
       renderParticipantCheckboxes();
@@ -334,6 +317,7 @@
 
     function updateMemberName(id, val) {
       const target = members.find(m => m.id === id);
+      
       if (target) {
         target.name = val;
         updateKeeperDropdown();
@@ -345,30 +329,42 @@
 
     function updateMemberField(id, field, val) {
       const target = members.find(m => m.id === id);
-      if (target) target[field] = val;
+      if (target) {
+          target[field] = val;
+      }
     }
 
     function changeChannel(id, newChannel) {
       updateMemberField(id, 'channel', newChannel);
+      
       const channelInfo = getChannelInfo(newChannel);
       const inputEl = document.getElementById(`account-input-${id}`);
-      if (inputEl) inputEl.placeholder = channelInfo.placeholder;
+      
+      if (inputEl) {
+          inputEl.placeholder = channelInfo.placeholder;
+      }
     }
 
     function addMemberRow() {
       const newId = Date.now();
       members.push({ id: newId, name: `Người ${members.length + 1}`, channel: "TCB", account: "" });
+      
       renderMembersInput();
       renderExpenses();
     }
 
     function removeMemberRow(id) {
       if (members.length <= 2) return;
+      
       members = members.filter(m => m.id !== id);
+      
       expenses.forEach(e => {
-        if (e.payer == id) e.payer = "fund";
+        if (e.payer == id) {
+            e.payer = "fund";
+        }
         e.participants = e.participants.filter(pId => pId !== id);
       });
+      
       renderMembersInput();
       renderExpenses();
     }
@@ -376,33 +372,44 @@
     function updateKeeperDropdown() {
       const select = document.getElementById("fundKeeperSelect");
       const currentVal = select.value || (members[0] ? members[0].id : "");
-      select.innerHTML = members.map(m => `<option value="${m.id}" ${currentVal == m.id ? 'selected' : ''}>${m.name}</option>`).join('');
+      
+      select.innerHTML = members.map(m => 
+          `<option value="${m.id}" ${currentVal == m.id ? 'selected' : ''}>${m.name}</option>`
+      ).join('');
     }
 
     function updatePayerDropdown() {
       const select = document.getElementById("newExpensePayer");
       const currentVal = select.value || "fund";
+      
       let html = `<option value="fund" ${currentVal === 'fund' ? 'selected' : ''}>💰 Quỹ chung</option>`;
       html += `<optgroup label="Cá nhân tự chi tiền túi:">`;
       html += members.map(m => `<option value="${m.id}" ${currentVal == m.id ? 'selected' : ''}>${m.name}</option>`).join('');
       html += `</optgroup>`;
+      
       select.innerHTML = html;
     }
 
     function renderParticipantCheckboxes() {
       const container = document.getElementById("participantCheckboxes");
+      
       container.innerHTML = members.map(m => `
         <label class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors text-xs font-medium text-slate-700">
           <input type="checkbox" value="${m.id}" checked onchange="updateSplitPreview()" class="participant-cb rounded text-indigo-600 focus:ring-indigo-500">
           <span>${m.name}</span>
         </label>
       `).join('');
+      
       updateSplitPreview();
     }
 
     function selectAllParticipants(check) {
       const checkboxes = document.querySelectorAll(".participant-cb");
-      checkboxes.forEach(cb => { cb.checked = check; });
+      
+      checkboxes.forEach(cb => { 
+          cb.checked = check; 
+      });
+      
       updateSplitPreview();
     }
 
@@ -423,6 +430,7 @@
 
     function renderExpenses() {
       const container = document.getElementById("expensesContainer");
+      
       container.innerHTML = "";
 
       if (expenses.length === 0) {
@@ -430,6 +438,7 @@
       } else {
         expenses.forEach(e => {
           let payerLabel = "";
+          
           if (e.payer === "fund") {
             payerLabel = `<span class="inline-flex items-center font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded text-xs">💰 Quỹ chung</span>`;
           } else {
@@ -450,6 +459,7 @@
 
           const row = document.createElement("div");
           row.className = "flex items-center justify-between p-3.5 bg-slate-50 border border-slate-100 rounded-xl text-sm gap-3";
+          
           row.innerHTML = `
             <div class="space-y-1">
               <div class="flex items-center gap-2">
@@ -465,6 +475,7 @@
               </button>
             </div>
           `;
+          
           container.appendChild(row);
         });
       }
@@ -487,10 +498,12 @@
         alert("Vui lòng nhập tên món đồ hoặc khoản chi.");
         return;
       }
+      
       if (!amount || amount <= 0) {
         alert("Vui lòng nhập số tiền hợp lệ lớn hơn 0.");
         return;
       }
+      
       if (participants.length === 0) {
         alert("Vui lòng tích chọn ít nhất một người cùng chia khoản này.");
         return;
@@ -506,6 +519,7 @@
 
       titleInput.value = "";
       amountInput.value = "";
+      
       selectAllParticipants(true);
       renderExpenses();
     }
@@ -523,20 +537,23 @@
       const keeperId = Number(document.getElementById("fundKeeperSelect").value) || members[0].id;
       const keeper = members.find(m => m.id === keeperId) || members[0];
 
+      let totalFundSpent = 0;
+      let totalOutOfPocketSpent = 0;
+
       const costMap = {};
       const outOfPocketMap = {};
+      
       members.forEach(m => {
         costMap[m.id] = 0;
         outOfPocketMap[m.id] = 0;
       });
 
-      let totalFundSpent = 0;
-      let totalOutOfPocketSpent = 0;
-
       expenses.forEach(e => {
         const shareCount = e.participants.length;
+        
         if (shareCount > 0) {
           const perPerson = e.amount / shareCount;
+          
           e.participants.forEach(pId => {
             if (costMap[pId] !== undefined) {
               costMap[pId] += perPerson;
@@ -548,6 +565,7 @@
           totalFundSpent += e.amount;
         } else {
           totalOutOfPocketSpent += e.amount;
+          
           if (outOfPocketMap[e.payer] !== undefined) {
             outOfPocketMap[e.payer] += e.amount;
           }
@@ -563,6 +581,7 @@
 
       const fundStatusEl = document.getElementById("fundStatusDisplay");
       const fundDetailEl = document.getElementById("fundStatusDetail");
+      
       document.getElementById("keeperNameDisplay").textContent = keeper.name;
 
       if (fundRemaining >= 0) {
@@ -575,13 +594,17 @@
         fundDetailEl.textContent = `Thủ quỹ cần thu thêm bù quỹ thâm hụt`;
       }
 
-      const balances = members.map(m => {
+      // Xử lý tính toán độ chính xác và bù trừ quỹ
+      let unroundedBalances = members.map(m => {
         const myPaidFund = initialPerPerson;
         const myPaidPocket = outOfPocketMap[m.id] || 0;
         const myTotalPaid = myPaidFund + myPaidPocket;
-        const myCost = Math.round(costMap[m.id] || 0);
+        const myCost = costMap[m.id] || 0;
         
+        // Net gốc (Chưa làm tròn)
         let net = myTotalPaid - myCost;
+        
+        // Thủ quỹ là người chịu trách nhiệm giữ khoản tiền quỹ dư (hoặc tự bù tiền túi nếu quỹ thâm hụt)
         if (m.id === keeperId) {
           net = net - fundRemaining;
         }
@@ -592,14 +615,40 @@
           paidFund: myPaidFund,
           paidPocket: myPaidPocket,
           cost: myCost,
-          net: Math.round(net)
+          net: net
         };
       });
+
+      // Làm tròn an toàn
+      let balances = unroundedBalances.map(b => ({
+          ...b,
+          cost: Math.round(b.cost),
+          net: Math.round(b.net)
+      }));
+
+      // Bù trừ sai số làm tròn (Rounding Error Fix) đảm bảo tổng Net = 0
+      let totalRoundingDiff = balances.reduce((sum, b) => sum + b.net, 0);
+      
+      if (totalRoundingDiff !== 0) {
+          const keeperIndex = balances.findIndex(b => b.id === keeperId);
+          if (keeperIndex !== -1) {
+              balances[keeperIndex].net -= totalRoundingDiff;
+          }
+      }
 
       const tbody = document.getElementById("balanceTableBody");
       tbody.innerHTML = "";
 
+      let creditors = [];
+      let debtors = [];
+
       balances.forEach(b => {
+        if (b.net > 0) {
+            creditors.push({ ...b });
+        } else if (b.net < 0) {
+            debtors.push({ ...b, net: Math.abs(b.net) });
+        }
+
         const tr = document.createElement("tr");
         let statusBadge = "";
         
@@ -612,6 +661,7 @@
         }
 
         const channel = getChannelInfo(b.channel);
+        
         tr.innerHTML = `
           <td class="py-3 text-slate-800">
             <span class="font-semibold">${b.name}</span>
@@ -623,14 +673,17 @@
           <td class="py-3 text-right text-slate-700 font-semibold">${formatVND(b.cost)}</td>
           <td class="py-3 text-right">${statusBadge}</td>
         `;
+        
         tbody.appendChild(tr);
       });
 
-      let creditors = balances.filter(b => b.net > 0).map(b => ({ ...b }));
-      let debtors = balances.filter(b => b.net < 0).map(b => ({ ...b, net: -b.net }));
+      // Tối ưu thuật toán cấn trừ nợ (Tham lam - Greedy Sorting)
+      creditors.sort((a, b) => b.net - a.net);
+      debtors.sort((a, b) => b.net - a.net);
 
       const transactions = [];
-      let i = 0, j = 0;
+      let i = 0;
+      let j = 0;
 
       while (i < debtors.length && j < creditors.length) {
         const settleAmount = Math.min(debtors[i].net, creditors[j].net);
@@ -667,6 +720,7 @@
         transactions.forEach((t, idx) => {
           const channel = getChannelInfo(t.toChannel);
           textSummary += `${idx + 1}. ${t.from} ➡️ chuyển ${formatVND(t.amount)} cho ${t.to}`;
+          
           if (t.toAccount) {
             textSummary += ` (${channel.name} - ${t.toAccount})\n`;
           } else {
@@ -674,8 +728,8 @@
           }
 
           const hasAccount = t.toAccount && t.toAccount.length >= 4;
-
           const item = document.createElement("div");
+          
           item.className = "flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl gap-3";
           
           item.innerHTML = `
@@ -700,6 +754,7 @@
               `}
             </div>
           `;
+          
           transContainer.appendChild(item);
         });
       }
@@ -731,13 +786,16 @@
 
     function copyToClipboard() {
       if (!currentSummaryText) return;
+      
       navigator.clipboard.writeText(currentSummaryText).then(() => {
         alert("Đã sao chép tổng kết và hướng dẫn chuyển khoản vào bộ nhớ tạm! Có thể dán ngay vào Zalo.");
       });
     }
 
     document.getElementById("qrModal").addEventListener("click", function(e) {
-      if (e.target === this) closeQRModal();
+      if (e.target === this) {
+          closeQRModal();
+      }
     });
 
     renderMembersInput();
